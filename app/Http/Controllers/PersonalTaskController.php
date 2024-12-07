@@ -10,21 +10,18 @@ use App\Models\PersonalTask;
 
 class PersonalTaskController extends Controller
 {
-    // Fungsi untuk menampilkan semua task
     public function index()
     {
-        $tasks = PersonalTask::where('user_id', Auth::user()->id_user)->get(); // Mengambil semua task berdasarkan user yang sedang login
+        $tasks = PersonalTask::where('user_id', Auth::user()->id_user)->get();
         return response()->json([
             'status' => true,
-            'message' => 'Daftar Task',
+            'message' => 'Daftar Task Saya',
             'data' => $tasks
         ], 200);
     }
 
-    // Fungsi untuk menambahkan task baru
-    public function store(Request $request)
+    public function tambahTask(Request $request)
     {
-        // Validasi input
         $data = $request->validate([
             'nama_task' => ['required', 'string', 'max:255'],
             'label' => ['required', 'string', 'max:255'],
@@ -34,7 +31,6 @@ class PersonalTaskController extends Controller
             'level_prioritas' => ['required', 'in:Low,Medium,High'],
         ]);
 
-        // Menambahkan task baru
         $task = PersonalTask::create([
             'nama_task' => $data['nama_task'],
             'label' => $data['label'],
@@ -42,7 +38,7 @@ class PersonalTaskController extends Controller
             'due_date' => $data['due_date'],
             'status' => $data['status'],
             'level_prioritas' => $data['level_prioritas'],
-            'user_id' => Auth::user()->id_user, // Mengaitkan dengan user yang sedang login
+            'user_id' => Auth::user()->id_user,
         ]);
 
         return response()->json([
@@ -52,7 +48,6 @@ class PersonalTaskController extends Controller
         ], 201);
     }
 
-    // Fungsi untuk menampilkan detail task
     public function show($id)
     {
         $task = PersonalTask::where('id_personal_task', $id)->where('user_id', Auth::user()->id_user)->first();
@@ -70,10 +65,9 @@ class PersonalTaskController extends Controller
         ], 200);
     }
 
-    // Fungsi untuk memperbarui task
     public function update(Request $request, $id)
     {
-        // Validasi input
+        // validasi input
         $data = $request->validate([
             'nama_task' => ['sometimes', 'string', 'max:255'],
             'label' => ['sometimes', 'string', 'max:255'],
@@ -92,7 +86,7 @@ class PersonalTaskController extends Controller
             ], 404);
         }
 
-        // Update task dengan data baru
+        // ppdate task dengan data baru
         $task->update($data);
 
         return response()->json([
@@ -102,7 +96,6 @@ class PersonalTaskController extends Controller
         ], 200);
     }
 
-    // Fungsi untuk menghapus task
     public function destroy($id)
     {
         $task = PersonalTask::where('id_personal_task', $id)->where('user_id', Auth::user()->id_user)->first();

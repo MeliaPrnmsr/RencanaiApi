@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('workspaces', function (Blueprint $table) {
             $table->id('id_projek');
             $table->string('nama_projek');
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->enum('status', ['Not Started', 'In Progress', 'Done']);
             $table->unsignedBigInteger('creator');
             $table->foreign('creator')->references('id_user')->on('users');
