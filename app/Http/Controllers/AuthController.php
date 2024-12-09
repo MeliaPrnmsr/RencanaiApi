@@ -48,6 +48,7 @@ class AuthController extends Controller
         ];
     }
 
+    //profile user
     public function userprofile(){
         $userData = auth()->user();
         return response()->json([
@@ -58,6 +59,7 @@ class AuthController extends Controller
         ], 200);
     }
 
+    //update profile user   
     public function updateprofile(Request $request) {
         // Validasi data input
         $data = $request->validate([
@@ -84,7 +86,6 @@ class AuthController extends Controller
     }
     
     
-
     public function logout(){
         auth()->user()->tokens()->delete();
 

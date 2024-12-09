@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 //memanggil controller
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PersonalTaskController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -24,4 +25,9 @@ Route::group(["middleware" =>  "auth:sanctum"], function (){
     Route::get('/logout', [AuthController::class, 'logout']);
 
     //personal task
+    Route::get('personaltask', [PersonalTaskController::class, 'index']); 
+    Route::post('personaltask', [PersonalTaskController::class, 'store']);
+    Route::get('personaltask/{id}', [PersonalTaskController::class, 'show']);
+    Route::put('personaltask/{id}', [PersonalTaskController::class, 'update']);
+    Route::delete('personaltask/{id}', [PersonalTaskController::class, 'destroy']);
 });

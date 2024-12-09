@@ -10,6 +10,7 @@ use App\Models\PersonalTask;
 
 class PersonalTaskController extends Controller
 {
+    //menampilkan daftar task dari User
     public function index()
     {
         $tasks = PersonalTask::where('user_id', Auth::user()->id_user)->get();
@@ -20,12 +21,13 @@ class PersonalTaskController extends Controller
         ], 200);
     }
 
-    public function tambahTask(Request $request)
+    //tambah task pribadi
+    public function store(Request $request)
     {
         $data = $request->validate([
             'nama_task' => ['required', 'string', 'max:255'],
             'label' => ['required', 'string', 'max:255'],
-            'deskripsi' => ['nullable', 'text'],
+            'deskripsi' => ['nullable', 'string'],
             'due_date' => ['required', 'date'],
             'status' => ['required', 'in:Not Started,In Progress,Done'],
             'level_prioritas' => ['required', 'in:Low,Medium,High'],
@@ -48,6 +50,7 @@ class PersonalTaskController extends Controller
         ], 201);
     }
 
+    //menampilkan detail task
     public function show($id)
     {
         $task = PersonalTask::where('id_personal_task', $id)->where('user_id', Auth::user()->id_user)->first();
@@ -65,9 +68,9 @@ class PersonalTaskController extends Controller
         ], 200);
     }
 
+    //update task user
     public function update(Request $request, $id)
     {
-        // validasi input
         $data = $request->validate([
             'nama_task' => ['sometimes', 'string', 'max:255'],
             'label' => ['sometimes', 'string', 'max:255'],
@@ -86,7 +89,6 @@ class PersonalTaskController extends Controller
             ], 404);
         }
 
-        // ppdate task dengan data baru
         $task->update($data);
 
         return response()->json([
@@ -96,6 +98,7 @@ class PersonalTaskController extends Controller
         ], 200);
     }
 
+    //hapus task user
     public function destroy($id)
     {
         $task = PersonalTask::where('id_personal_task', $id)->where('user_id', Auth::user()->id_user)->first();
