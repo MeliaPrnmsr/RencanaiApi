@@ -43,9 +43,13 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
     
         return [
-            'user' => $user,
-            'token' => $token,
+            'data' => array_merge(
+                $user->toArray(), // Semua data user
+                ['token' => $token] // Tambahkan token secara manual
+            ),
         ];
+        
+        
     }
 
     //profile user
