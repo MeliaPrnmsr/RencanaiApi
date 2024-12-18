@@ -11,123 +11,54 @@ use App\Models\Workspace;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class AnnouncementController extends Controller
 {
     public function index($ws_id)
-{
-    $anno = Announcement::where('ws_id', $ws_id)->latest()->paginate(5);
+    {
+        $anno = Announcement::where('ws_id', $ws_id)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-    return response()->json([
-        'success' => true,
-        'message' => 'List of Announcements for this workspace',
-        'data' => $anno
-    ]);
-}
-
-public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'announcement' => ['required', 'string'],
-        'ws_id' => ['required', 'integer'],
-        'created_by' => ['required', 'integer'],
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
-
-    $workspace = Workspace::find($request->ws_id);
-    if (!$workspace) {
         return response()->json([
-            'success' => false,
-            'message' => 'Workspace tidak ditemukan',
-        ], 404);
+            'success' => true,
+            'message' => 'Daftar Announcement',
+            'data' => $anno
+        ]);
     }
 
-    $anno = Announcement::create([
-        'announcement' => $request->announcement,
-        'ws_id' => $request->ws_id,
-        'created_by' => $request->created_by
-    ]);
+    public function store(Request $request, $ws_id)
+    {
+        $userId = Auth::user()->id_user;
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Announcement berhasil ditambahkan',
-        'data' => $anno
-    ]);
-}
+        $validator = Validator::make($request->all(), [
+            'announcement' => ['required', 'string'],
+        ]);
 
-public function show($ws_id, $id)
-{
-    $anno = Announcement::where('ws_id', $ws_id)->find($id);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-    if (!$anno) {
+        $workspace = Workspace::find($request->ws_id);
+        if (!$workspace) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Workspace tidak ditemukan',
+            ], 404);
+        }
+
+        $anno = Announcement::create([
+            'announcement' => $request->announcement,
+            'ws_id' => $ws_id,
+            'created_by' => $userId,
+        ]);
+
         return response()->json([
-            'success' => false,
-            'message' => 'Announcement tidak ditemukan',
-        ], 404);
+            'success' => true,
+            'message' => 'Announcement berhasil ditambahkan',
+            'data' => $anno
+        ]);
     }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Detail Data Announcement',
-        'data' => $anno
-    ]);
-}
-
-public function update(Request $request, $ws_id, $id)
-{
-    $validator = Validator::make($request->all(), [
-        'announcement' => ['sometimes', 'string'],
-        'ws_id' => ['sometimes', 'integer'],
-        'created_by' => ['sometimes', 'integer'],
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
-    }
-
-    $anno = Announcement::where('ws_id', $ws_id)->find($id);
-
-    if (!$anno) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Announcement tidak ditemukan',
-        ], 404);
-    }
-
-    $dataToUpdate = array_filter($request->all(), function ($value) {
-        return $value !== null;
-    });
-
-    $anno->update($dataToUpdate);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Announcement berhasil diubah',
-        'data' => $anno->refresh()
-    ]);
-}
-
-public function destroy($ws_id, $id)
-{
-    $anno = Announcement::where('ws_id', $ws_id)->find($id);
-
-    if (!$anno) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Announcement tidak ditemukan',
-        ], 404);
-    }
-
-    $anno->delete();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Announcement berhasil dihapus',
-        'data' => $anno
-    ]);
-}
 
 }

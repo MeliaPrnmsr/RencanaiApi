@@ -50,9 +50,6 @@ Route::group(["middleware" =>  "auth:sanctum"], function (){
     // Announcement (per workspace)
     Route::get('workspaces/{ws_id}/announcement', [AnnouncementController::class, 'index']);
     Route::post('workspaces/{ws_id}/announcement', [AnnouncementController::class, 'store']);
-    Route::get('workspaces/{ws_id}/announcement/{id}', [AnnouncementController::class, 'show']);
-    Route::put('workspaces/{ws_id}/announcement/{id}', [AnnouncementController::class, 'update']);
-    Route::delete('workspaces/{ws_id}/announcement/{id}', [AnnouncementController::class, 'destroy']);
 
 
     
