@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Workspace;
 use App\Models\WSTask;
-
+use App\Models\Invite;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -40,11 +42,16 @@ class WorkspacesController extends Controller
     {
         $userId = Auth::user()->id_user;
 
-        $validator = Validator::make($request->all(), [
+        
+         $validator = Validator::make($request->all(), [
             'nama_projek' => ['required', 'string'],
             'deskripsi' => ['required', 'string'],
             'status' => ['required', 'string'],
+            'details' => ['required', 'array'], // Validasi bahwa 'details' adalah array
+            'details.*.statusinv' => ['required', 'string'], // Validasi setiap elemen 'statusinv'
+            'details.*.email' => ['required', 'string'], // Validasi setiap elemen 'user_id'
         ]);
+
 
         if($validator->fails()) {
             return response()->json($validator->errors(), 422);
@@ -57,11 +64,34 @@ class WorkspacesController extends Controller
             'creator' => $userId,
 
         ]);
+        $workspaceId = $workspaces->id_projek;
+
+        foreach ($request->details as $detail) {
+            // Cari user_id berdasarkan email
+            $user = User::where('email', $detail['email'])->first();
+    
+            // Jika email tidak ditemukan, return error
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Email {$detail['email']} tidak ditemukan di sistem.",
+                ], 404);
+            }
+    
+            // Masukkan data ke tabel Invite
+            Invite::create([
+                'status' => $detail['statusinv'], 
+                'ws_id' => $workspaceId,         
+                'user_id' => $user->id_user, 
+        ]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Workspace berahasil ditambahkan',
             'data' => $workspaces
         ]);
+
     }
 
     public function show($id)
