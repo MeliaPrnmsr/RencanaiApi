@@ -39,7 +39,7 @@ class Workspace extends Model
         return $this->hasMany(Invite::class, 'ws_id', 'id_projek');
     }
 
-    public function member()
+    public function members()
     {
         return $this->belongsToMany(User::class, 'workspace_members', 'ws_id', 'member_id');
     }  

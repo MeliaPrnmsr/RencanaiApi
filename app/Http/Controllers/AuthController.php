@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 
 //memanggil model
@@ -92,6 +93,8 @@ class AuthController extends Controller
     
     public function logout(){
         auth()->user()->tokens()->delete();
+
+        DB::table('sessions')->where('user_id', auth()->user()->id_user)->delete();
 
         return response()->json([
             'status' => true,

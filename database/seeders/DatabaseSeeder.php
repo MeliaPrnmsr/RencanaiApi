@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
     {
         /* PENAMBAHAN USER PENAMBAHAN USER PENAMBAHAN USER PENAMBAHAN USER */
         User::create([
+            'name' => "Yosep", 
+            'email' => "yosep@gmail.com",
+            'password' => bcrypt('rahasia123')
+        ]);
+
+        User::create([
             'name' => "Melia Purnamasari Sihombing", 
             'email' => "melia@gmail.com",
             'password' => bcrypt('12345678')
@@ -62,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'nama_projek' => "Mobile (legend)", 
             'deskripsi' => "membuat sebuah aplikasi android",
             'status' => "In Progress",
-            'creator' => "2"
+            'creator' => "1"
         ]);
 
         Workspace::create([
@@ -96,8 +102,7 @@ class DatabaseSeeder extends Seeder
 
         /* PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK */
         WSTask::create([
-            'nama_task' => "Desain figma", 
-            'label' => "Front End", 
+            'nama_task' => "Desain figma",
             'deskripsi' => "membuat sebuah aplikasi android",
             'due_date' => "2024-11-28",
             'status' => "In Progress",
@@ -108,8 +113,7 @@ class DatabaseSeeder extends Seeder
 
         /* PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK PENAMBAHAN TASK_PROJEK */
         PersonalTask::create([
-            'nama_task' => "Laporan Folklor", 
-            'label' => "Folklor", 
+            'nama_task' => "Laporan Folklor",
             'deskripsi' => "Membuat Laporan Penelitian",
             'due_date' => "2024-12-3",
             'status' => "In Progress",

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_projek');
             $table->string('nama_projek');
             $table->text('deskripsi')->nullable();
-            $table->enum('status', ['Not Started', 'In Progress', 'Done']);
+            $table->enum('status', ['Not Started', 'In Progress', 'Done', 'Inactivated']);
             $table->unsignedBigInteger('creator');
             $table->foreign('creator')->references('id_user')->on('users');
             $table->timestamps();

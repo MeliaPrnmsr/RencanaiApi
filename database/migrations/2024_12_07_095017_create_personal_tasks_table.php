@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('personal_tasks', function (Blueprint $table) {
             $table->id('id_personal_task');
             $table->string('nama_task');
-            $table->string('label');
             $table->text('deskripsi')->nullable();
             $table->date('due_date');
             $table->enum('status', ['Not Started', 'In Progress', 'Done']);

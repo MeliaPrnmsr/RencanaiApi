@@ -26,7 +26,6 @@ class PersonalTaskController extends Controller
     {
         $data = $request->validate([
             'nama_task' => ['required', 'string', 'max:255'],
-            'label' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'due_date' => ['required', 'date'],
             'status' => ['required', 'in:Not Started,In Progress,Done'],
@@ -35,7 +34,6 @@ class PersonalTaskController extends Controller
 
         $task = PersonalTask::create([
             'nama_task' => $data['nama_task'],
-            'label' => $data['label'],
             'deskripsi' => $data['deskripsi'],
             'due_date' => $data['due_date'],
             'status' => $data['status'],
@@ -73,7 +71,6 @@ class PersonalTaskController extends Controller
     {
         $data = $request->validate([
             'nama_task' => ['sometimes', 'string', 'max:255'],
-            'label' => ['sometimes', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'text'],
             'due_date' => ['sometimes', 'date'],
             'status' => ['sometimes', 'in:Not Started,In Progress,Done'],
