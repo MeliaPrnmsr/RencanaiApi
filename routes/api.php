@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PersonalTaskController;
 use App\Http\Controllers\WorkspacesController;
 use App\Http\Controllers\AnnouncementController;
-
+use App\Http\Controllers\InviteController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -51,6 +51,9 @@ Route::group(["middleware" =>  "auth:sanctum"], function (){
     Route::get('workspaces/{ws_id}/announcement', [AnnouncementController::class, 'index']);
     Route::post('workspaces/{ws_id}/announcement', [AnnouncementController::class, 'store']);
 
-
+    // Invite
+    Route::get('invite', [InviteController::class, 'index']); 
+    Route::get('invite/{id}', [InviteController::class, 'show']);
+    Route::put('invite/{id}', [InviteController::class, 'update']);
     
 });

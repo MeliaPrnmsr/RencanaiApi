@@ -48,7 +48,6 @@ class WorkspacesController extends Controller
             'deskripsi' => ['required', 'string'],
             'status' => ['required', 'string'],
             'details' => ['required', 'array'], // Validasi bahwa 'details' adalah array
-            'details.*.statusinv' => ['required', 'string'], // Validasi setiap elemen 'statusinv'
             'details.*.email' => ['required', 'string'], // Validasi setiap elemen 'user_id'
         ]);
 
@@ -80,7 +79,7 @@ class WorkspacesController extends Controller
     
             // Masukkan data ke tabel Invite
             Invite::create([
-                'status' => $detail['statusinv'], 
+                'status' => 'Pending', 
                 'ws_id' => $workspaceId,         
                 'user_id' => $user->id_user, 
         ]);
