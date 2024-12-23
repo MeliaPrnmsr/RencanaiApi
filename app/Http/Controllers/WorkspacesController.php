@@ -95,13 +95,38 @@ class WorkspacesController extends Controller
 
     public function show($id)
     {
-        $workspaces = Workspace::find($id);
+        // Menemukan detail workspace berdasarkan ID
+        $workspace = Workspace::find($id);
+
+        if (!$workspace) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Workspace tidak ditemukan',
+            ], 404);
+        }
+
+        // Menemukan tasks yang terkait dengan workspace
+        $tasks = WSTask::where('ws_id', $id)
+            ->orderByRaw("
+                CASE 
+                    WHEN level_prioritas = 'High' THEN 1
+                    WHEN level_prioritas = 'Medium' THEN 2
+                    WHEN level_prioritas = 'Low' THEN 3
+                    ELSE 4 
+                END")
+            ->orderBy('due_date', 'asc')
+            ->get();
+
         return response()->json([
             'success' => true,
-            'message' => 'Detail Data Workspace',
-            'data' => $workspaces
+            'message' => 'Detail Data Workspace dan List of Task Workspaces',
+            'data' => [
+                'workspace' => $workspace,
+                'tasks' => $tasks
+            ]
         ]);
     }
+
 
     public function update(Request $request, $id)
     {
@@ -139,26 +164,7 @@ class WorkspacesController extends Controller
 
 
     #taskWorkSpace
-    public function indexTaskWs($ws_id)
-    {
-        // Menampilkan tasks hanya untuk workspace tertentu
-        $taskws = WSTask::where('ws_id', $ws_id)
-        ->orderByRaw("
-            CASE 
-                WHEN level_prioritas = 'High' THEN 1
-                WHEN level_prioritas = 'Medium' THEN 2
-                WHEN level_prioritas = 'Low' THEN 3
-                ELSE 4 
-            END")
-        ->orderBy('due_date', 'asc')
-        ->get();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'List of Task Workspaces for this workspace',
-            'data' => $taskws
-        ]);
-    }
+    
 
     public function storeTaskWs(Request $request, $ws_id)
     {

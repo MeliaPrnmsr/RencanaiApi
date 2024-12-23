@@ -41,7 +41,6 @@ Route::group(["middleware" =>  "auth:sanctum"], function (){
     Route::put('workspaces/{id}', [WorkspacesController::class, 'update']);
 
     // Task Workspaces (per workspace)
-    Route::get('workspaces/{ws_id}/taskws', [WorkspacesController::class, 'indexTaskWs']);
     Route::post('workspaces/{ws_id}/taskws', [WorkspacesController::class, 'storeTaskWs']);
     Route::get('workspaces/{ws_id}/taskws/{id}', [WorkspacesController::class, 'showTaskWs']);
     Route::put('workspaces/{ws_id}/taskws/{id}', [WorkspacesController::class, 'updateTaskWs']);
